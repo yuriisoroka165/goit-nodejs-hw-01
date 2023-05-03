@@ -5,7 +5,7 @@ const { nanoid } = require("nanoid");
 const contactsPath = path.resolve("db/contacts.json");
 
 // функція повертає масив контактів
-async function listContacts() {
+async function getListOfContacts() {
     try {
         const contacts = await fs.readFile(contactsPath);
         return JSON.parse(contacts);
@@ -17,7 +17,7 @@ async function listContacts() {
 // функція повертає контакт з заданим id
 async function getContactById(contactId) {
     try {
-        const contacts = await listContacts();
+        const contacts = await getListOfContacts();
         const oneContact = contacts.find(item => item.id === contactId);
         return oneContact || null;
     } catch (error) {
@@ -28,7 +28,7 @@ async function getContactById(contactId) {
 // функція видаляє контакт за заданим id
 async function removeContact(contactId) {
     try {
-        const contacts = await listContacts();
+        const contacts = await getListOfContacts();
         const index = contacts.findIndex(item => item.id === contactId);
         if (index === -1) {
             return null;
@@ -44,7 +44,7 @@ async function removeContact(contactId) {
 // функція додає новий контакт в сховище контактів
 async function addContact(name, email, phone) {
     try {
-        const contacts = await listContacts();
+        const contacts = await getListOfContacts();
         const newContact = {
             id: nanoid(),
             name,
@@ -60,7 +60,7 @@ async function addContact(name, email, phone) {
 }
 
 module.exports = {
-    listContacts,
+    getListOfContacts,
     getContactById,
     removeContact,
     addContact,
